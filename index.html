@@ -1,0 +1,85 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <meta charset="utf-8" />
+    <link rel="stylesheet" href="style.css">
+    <title>Stopwatch</title>
+  </head>
+  <body>
+    <h1>Stopwatch</h1>
+    <div class="container">
+        <div class="wrapper"> 
+            <p>
+      <span id="hours">00</span>:<span id="minutes">00</span>:<span id="seconds"
+        >00</span
+      >:<span id="milliseconds">00</span>
+      </p>
+    
+    <br />
+    <button id="startButton">Start</button>
+    <button id="pauseButton">Pause</button>
+    <button id="resetButton">Reset</button>
+    </div>
+    </div>
+    <script>
+      let startTime;
+      let elapsedTime = 0;
+      let timerInterval;
+
+      const hoursContainer = document.getElementById("hours");
+      const minutesContainer = document.getElementById("minutes");
+      const secondsContainer = document.getElementById("seconds");
+      const millisecondsContainer = document.getElementById("milliseconds");
+
+      function formatTime(time) {
+        let hours = Math.floor(time / 3600000);
+        time = time % 3600000;
+        let minutes = Math.floor(time / 60000);
+        time = time % 60000;
+        let seconds = Math.floor(time / 1000);
+        let milliseconds = time % 1000;
+        return {
+          hours: hours.toString().padStart(2, "0"),
+          minutes: minutes.toString().padStart(2, "0"),
+          seconds: seconds.toString().padStart(2, "0"),
+          milliseconds: milliseconds.toString().padStart(3, "0"),
+        };
+      }
+
+      function printTime() {
+        let time = formatTime(elapsedTime);
+        hoursContainer.innerHTML = time.hours;
+        minutesContainer.innerHTML = time.minutes;
+        secondsContainer.innerHTML = time.seconds;
+        millisecondsContainer.innerHTML = time.milliseconds;
+      }
+
+      function startTimer() {
+        startTime = Date.now() - elapsedTime;
+        timerInterval = setInterval(function () {
+          elapsedTime = Date.now() - startTime;
+          printTime();
+        }, 10);
+      }
+
+      function pauseTimer() {
+        clearInterval(timerInterval);
+      }
+
+      function resetTimer() {
+        clearInterval(timerInterval);
+        elapsedTime = 0;
+        printTime();
+      }
+
+      const startButton = document.getElementById("startButton");
+      startButton.addEventListener("click", startTimer);
+
+      const pauseButton = document.getElementById("pauseButton");
+      pauseButton.addEventListener("click", pauseTimer);
+
+      const resetButton = document.getElementById("resetButton");
+      resetButton.addEventListener("click", resetTimer);
+    </script>
+  </body>
+</html>
